@@ -1,0 +1,17 @@
+name: Python application
+on: workflow_dispatch
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/chechout@v4
+    - name: Setup Python version 3.9
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.9"
+        
+    - name: Install Dependencies
+      run: pip install --no-cache-dir --upgrade -r requirements.txt
+      
+    - name: Test with pytest
+      run: pytest
