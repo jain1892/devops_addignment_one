@@ -15,5 +15,5 @@ jobs:
     - name: Install Dependencies
       run: pip install --no-cache-dir --upgrade -r requirements.txt
       
-    - name: Test with pytest
+    - name: Run Tests
       run: pytest
