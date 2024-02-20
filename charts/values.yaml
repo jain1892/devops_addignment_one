@@ -1,0 +1,12 @@
+type: Namespace
+namespaceName: app-namespace
+labels:
+  name: python-app
+podKind: Pod
+configMapKind: ConfigMap
+podName: python-app
+containerName: python-app-container
+image:
+  repository: ""
+  tag: ""
+  pullPolicy: ""
