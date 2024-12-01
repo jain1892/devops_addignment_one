@@ -1,7 +1,0 @@
-kind: {{ .Values.type }}
-apiVersion: v1
-metadata:
-  name: {{ .Values.namespaceName }}
-  labels:
-    name: {{ .Values.labels.name }}
-    {{- template "metadata.labels"}}
