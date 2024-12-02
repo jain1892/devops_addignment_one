@@ -11,11 +11,15 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Install Trivy (Vulnerability Scanner)
-      run: curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh
+      run: |
+        wget -qO- https://github.com/aquasecurity/trivy/releases/latest/download/trivy_Linux-64bit.tar.gz | tar zxv
+        sudo mv trivy /usr/local/bin/
+
+    - name: Verify Trivy Installation
+      run: trivy --version
 
     - name: Scan Dependencies
       run: trivy fs --exit-code 1 --severity HIGH,CRITICAL .
 
     - name: Scan Dockerfile
       run: trivy config .
-
