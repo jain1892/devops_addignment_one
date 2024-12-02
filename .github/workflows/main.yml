@@ -48,4 +48,4 @@ jobs:
       run: |
         curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
         helm package python-app
-        helm push python-app-0.1.0.tgz oci://$ECR_REGISTRY/
+        helm push neeraj-helm-0.0.1.tgz oci://$ECR_REGISTRY/
