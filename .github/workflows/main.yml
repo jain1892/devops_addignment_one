@@ -10,6 +10,8 @@ jobs:
   # 1. Test, Security, Docker, and Helm jobs
   test:
     uses: ./.github/workflows/test.yaml
+    with:
+      python-version: "3.10"
 
   security:
     uses: ./.github/workflows/security.yaml
