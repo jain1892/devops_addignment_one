@@ -1,0 +1,21 @@
+name: Security Workflow
+
+on:
+  workflow_call:
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout the code
+      uses: actions/checkout@v4
+
+    - name: Install Trivy (Vulnerability Scanner)
+      run: curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh
+
+    - name: Scan Dependencies
+      run: trivy fs --exit-code 1 --severity HIGH,CRITICAL .
+
+    - name: Scan Dockerfile
+      run: trivy config .
+

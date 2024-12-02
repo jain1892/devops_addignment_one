@@ -1,0 +1,34 @@
+name: Docker Workflow
+
+on:
+  workflow_call:
+    inputs:
+      ecr_registry:
+        required: true
+      ecr_repository:
+        required: true
+      image_tag:
+        required: true
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout the code
+      uses: actions/checkout@v4
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v3
+      with:
+        role-to-assume: ${{ secrets.AWS_GITHUB_ROLE }}
+        role-session-name: docker-session
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Login to Amazon ECR
+      uses: aws-actions/amazon-ecr-login@v2
+
+    - name: Build and Push Docker Image
+      run: |
+        docker build -t ${{ inputs.ecr_registry }}/${{ inputs.ecr_repository }}:${{ inputs.image_tag }} .
+        docker push ${{ inputs.ecr_registry }}/${{ inputs.ecr_repository }}:${{ inputs.image_tag }}
+
