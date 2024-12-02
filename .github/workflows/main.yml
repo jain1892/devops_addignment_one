@@ -26,6 +26,6 @@ jobs:
 
   helm:
     uses: ./.github/workflows/helm.yaml
-    needs: docker
+#    needs: docker
     secrets: inherit
 
