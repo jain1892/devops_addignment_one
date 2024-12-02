@@ -2,13 +2,14 @@ name: Docker Workflow
 
 on:
   workflow_call:
-    inputs:
+    secrets:
       ecr_registry:
         required: true
         type: string
       ecr_repository:
         required: true
         type: string
+    inputs:
       image_tag:
         required: true
         type: string
@@ -33,6 +34,6 @@ jobs:
 
     - name: Build and Push Docker Image
       run: |
-        docker build -t ${{ inputs.ecr_registry }}/${{ inputs.ecr_repository }}:${{ inputs.image_tag }} .
-        docker push ${{ inputs.ecr_registry }}/${{ inputs.ecr_repository }}:${{ inputs.image_tag }}
+        docker build -t ${{ secrets.ecr_registry }}/${{ secrets.ecr_repository }}:${{ inputs.image_tag }} .
+        docker push ${{ secrets.ecr_registry }}/${{ secrets.ecr_repository }}:${{ inputs.image_tag }}
 
