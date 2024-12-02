@@ -20,6 +20,7 @@ jobs:
   docker:
     uses: ./.github/workflows/docker.yaml
     needs: security
+    secrets: inherit
     with:
       ecr_registry: ${{ secrets.AWS_ECR_REGISTRY }}
       ecr_repository: ${{ secrets.AWS_ECR_REPO }}
@@ -28,6 +29,7 @@ jobs:
   helm:
     uses: ./.github/workflows/helm.yaml
     needs: docker
+    secrets: inherit
     with:
       ecr_registry: ${{ secrets.AWS_ECR_REGISTRY }}
 
