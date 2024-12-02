@@ -27,5 +27,5 @@ jobs:
         ECR_REGISTRY: ${{ secrets.AWS_ECR_REGISTRY }}
       run: |
         helm package python-app
-        helm push neeraj-helm-0.0.1.tgz oci://$ECR_REGISTRY/
+        helm push neeraj-helm-0.0.1.tgz oci://$ECR_REGISTRY/neeraj-helm
 
