@@ -2,10 +2,6 @@ name: Helm Workflow
 
 on:
   workflow_call:
-    secrets:
-      ecr_registry:
-        required: true
-        type: string
 
 jobs:
   helm:
@@ -27,9 +23,7 @@ jobs:
         version: v3.11.3
 
     - name: Build and Push Helm Chart
-      env:
-
       run: |
         helm package python-app
-        helm push neeraj-helm-0.0.1.tgz oci://${{ secrets.ecr_registry }}/
+        helm push neeraj-helm-0.0.1.tgz oci://${{ secrets.AWS_ECR_REGISTRY }}/
 
