@@ -8,24 +8,27 @@ jobs:
     - name: Checkout the code
       uses: actions/checkout@v4
 
-    - name: Install Trivy (Vulnerability Scanner)
-      run: |
-        wget -q https://github.com/aquasecurity/trivy/releases/download/v0.57.1/trivy_0.57.1_Linux-64bit.tar.gz -O trivy.tar.gz
-        tar -zxvf trivy.tar.gz
-        sudo mv trivy /usr/local/bin/
-        rm -f trivy.tar.gz
-
-    - name: Verify Trivy Installation
-      run: trivy --version
-
-    - name: Cache Trivy Database
+    - name: Cache Trivy Vulnerability Database
       uses: actions/cache@v3
       with:
         path: ~/.cache/trivy
         key: ${{ runner.os }}-trivy-db
+        restore-keys: |
+          ${{ runner.os }}-trivy-db
 
-    - name: Scan Dependencies
-      run: trivy fs --exit-code 1 --severity HIGH,CRITICAL .
+    - name: Scan Dependencies for Vulnerabilities
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'fs'
+        severity: 'HIGH,CRITICAL'
+        exit-code: 1
+        ignore-unfixed: true
+        cache-dir: ~/.cache/trivy
 
-    - name: Scan Dockerfile
-      run: trivy config .
+    - name: Scan Dockerfile for Misconfigurations
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'config'
+        severity: 'HIGH,CRITICAL'
+        exit-code: 1
+        cache-dir: ~/.cache/trivy
