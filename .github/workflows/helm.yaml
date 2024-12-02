@@ -17,17 +17,10 @@ jobs:
         role-session-name: helm-session
         aws-region: ${{ secrets.AWS_REGION }}
 
-#    - name: Install Helm
-#      uses: azure/setup-helm@v3
-#      with:
-#        version: v3.11.3
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
 
-#    - name: Build and Push Helm Chart
-#      env:
-#        ECR_REGISTRY: ${{ secrets.AWS_ECR_REGISTRY }}
-#      run: |
-#        helm package python-app
-#        helm push neeraj-helm-0.0.1.tgz oci://$ECR_REGISTRY/neeraj-helm
     - name: Build and push the helm chart to Amazon ECR
       shell: bash
       env:
