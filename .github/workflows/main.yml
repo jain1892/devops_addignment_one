@@ -20,9 +20,15 @@ jobs:
   docker:
     uses: ./.github/workflows/docker.yaml
     needs: security
+    with:
+      ecr_registry: ${{ secrets.AWS_ECR_REGISTRY }}
+      ecr_repository: ${{ secrets.AWS_ECR_REPO }}
+      image_tag: latest
 
   helm:
     uses: ./.github/workflows/helm.yaml
     needs: docker
+    with:
+      ecr_registry: ${{ secrets.AWS_ECR_REGISTRY }}
 
 

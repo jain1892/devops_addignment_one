@@ -5,6 +5,7 @@ on:
     inputs:
       ecr_registry:
         required: true
+        type: string
 
 jobs:
   helm:
