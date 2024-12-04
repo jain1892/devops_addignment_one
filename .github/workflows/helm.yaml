@@ -33,12 +33,3 @@ jobs:
         helm package python-app
         helm push neeraj-helm-0.0.1.tgz oci://$ECR_REGISTRY/
 
-#    - name: Build and push the helm chart to Amazon ECR
-#      shell: bash
-#      env:
-#        ECR_REGISTRY: ${{ secrets.AWS_ECR_REGISTRY }}
-#      run: |
-#        curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
-#        helm package python-app
-#        helm push neeraj-helm-0.0.1.tgz oci://$ECR_REGISTRY/
-

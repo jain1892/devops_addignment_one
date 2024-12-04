@@ -29,3 +29,11 @@ jobs:
     needs: docker
     secrets: inherit
 
+  deploy_dev:
+    uses: ./.github/workflows/deploy.yaml
+    needs: helm
+    secrets: inherit
+    with:
+      image_tag: latest
+      namespace: dev
+      environment: dev

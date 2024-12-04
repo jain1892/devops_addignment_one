@@ -1,0 +1,49 @@
+name: Deploy Workflow
+
+on:
+  workflow_call:
+    inputs:
+      image_tag:
+        type: string
+        required: true
+      namespace:
+        type: string
+        required: true
+      environment:
+        type: string
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout the code
+      uses: actions/checkout@v4
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v3
+      with:
+        role-to-assume: ${{ secrets.AWS_GITHUB_ROLE }}
+        role-session-name: deploy-session
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Install kubectl
+      uses: azure/setup-kubectl@v3
+      with:
+        version: v1.27.0
+
+    - name: Update kubeconfig for EKS
+      run: |
+        aws eks update-kubeconfig --region ${{ secrets.AWS_REGION }} --name neeraj-eks-cluster
+
+    - name: Deploy Helm Chart
+      env:
+        ECR_REGISTRY: ${{ secrets.AWS_ECR_REGISTRY }}
+        ECR_REPO: ${{ secrets.AWS_ECR_REPO }}
+      run: |
+        helm upgrade --install python-app oci://$ECR_REGISTRY/neeraj-helm \
+          --namespace ${{ inputs.namespace }} \
+          --create-namespace \
+          --set image.repository=$ECR_REPO \
+          --set image.tag=${{ inputs.image_tag }} \
+          --set environment=${{ inputs.environment }}
