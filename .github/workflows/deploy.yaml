@@ -42,21 +42,17 @@ jobs:
         echo $(cat ./kubeconfig | base64) >> $GITHUB_ENV
         echo 'EOF' >> $GITHUB_ENV
 
-    - name: Verify Kubernetes Connection
-      run: |
-        kubectl get nodes
+    - name: helm deploy
+      uses: koslib/helm-eks-action@master
       env:
-        KUBECONFIG: ${{ github.workspace }}/kubeconfig
+        KUBE_CONFIG_DATA: ${{ env.KUBE_CONFIG_DATA }}
+      with:
+        command: helm secrets upgrade <release name> --install --wait <chart> -f <path to values.yaml>
+
 
     - name: Deploy Helm Chart
       env:
         ECR_REGISTRY: ${{ secrets.AWS_ECR_REGISTRY }}
         ECR_REPO: ${{ secrets.AWS_ECR_REPO }}
-        KUBE_CONFIG_DATA: ${{ env.KUBE_CONFIG_DATA }}
       run: |
-          helm upgrade --install python-app oci://$ECR_REGISTRY/neeraj-helm \
-          --namespace ${{ inputs.namespace }} \
-          --create-namespace \
-          --set image.repository=$ECR_REGISTRY/$ECR_REPO \
-          --set image.tag=${{ inputs.image_tag }} \
-          --set environment=${{ inputs.environment }}
+          helm upgrade --install python-app oci://$ECR_REGISTRY/neeraj-helm --namespace ${{ inputs.namespace }} --create-namespace --set image.repository=$ECR_REGISTRY/$ECR_REPO -set image.tag=${{ inputs.image_tag }} --set environment=${{ inputs.environment }}
