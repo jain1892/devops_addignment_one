@@ -42,12 +42,6 @@ jobs:
         echo $(cat ./kubeconfig) >> $GITHUB_ENV
         echo 'EOF' >> $GITHUB_ENV
 
-    - name: Verify Kubernetes Connection
-      run: |
-        kubectl get nodes
-      env:
-        KUBECONFIG: ${{ github.workspace }}/kubeconfig
-
     - name: Deploy Helm Chart
       env:
         ECR_REGISTRY: ${{ secrets.AWS_ECR_REGISTRY }}
