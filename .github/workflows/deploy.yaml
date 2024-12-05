@@ -37,7 +37,10 @@ jobs:
 
     - name: Update kubeconfig for EKS
       run: |
-        aws eks update-kubeconfig --region ${{ secrets.AWS_REGION }} --name neeraj-eks-cluster
+        aws eks update-kubeconfig --region ${{ secrets.AWS_REGION }} --name neeraj-eks-cluster --kubeconfig ./kubeconfig
+        echo 'KUBE_CONFIG_DATA<<EOF' >> $GITHUB_ENV
+        echo $(cat ./kubeconfig | base64) >> $GITHUB_ENV
+        echo 'EOF' >> $GITHUB_ENV
 
     - name: Verify Kubernetes Connection
       run: |
@@ -49,6 +52,7 @@ jobs:
       env:
         ECR_REGISTRY: ${{ secrets.AWS_ECR_REGISTRY }}
         ECR_REPO: ${{ secrets.AWS_ECR_REPO }}
+        KUBE_CONFIG_DATA: ${{ env.KUBE_CONFIG_DATA }}
       run: |
           helm upgrade --install python-app oci://$ECR_REGISTRY/neeraj-helm \
           --namespace ${{ inputs.namespace }} \
