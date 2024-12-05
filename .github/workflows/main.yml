@@ -12,33 +12,52 @@ permissions:
   contents: read
 
 jobs:
-  # 1. Test, Security, Docker, and Helm jobs
   test:
+    name: Run Tests
     uses: ./.github/workflows/test.yaml
     with:
       python-version: "3.10"
 
   security:
+    name: Run Security Scan
     uses: ./.github/workflows/security.yaml
-    needs: test
 
   docker:
+    name: Build and Publish Docker Image
     uses: ./.github/workflows/docker.yaml
-    needs: security
+    needs:
+      - test
+      - security
     secrets: inherit
     with:
       image_tag: latest
 
   helm:
+    name: Build and Publish Helm Chart
+    needs:
+      - test
+      - security
     uses: ./.github/workflows/helm.yaml
-    needs: docker
     secrets: inherit
 
   deploy_dev:
+    name: Deploy App to Dev Env
     uses: ./.github/workflows/deploy.yaml
-    needs: helm
+    needs:
+      - docker
+      - helm
     secrets: inherit
     with:
       image_tag: latest
       namespace: dev
       environment: dev
+
+  deploy_prod:
+    name: Deploy App to Prod Env
+    uses: ./.github/workflows/deploy.yaml
+    needs: deploy_dev
+    secrets: inherit
+    with:
+      image_tag: latest
+      namespace: prod
+      environment: prod
