@@ -32,12 +32,12 @@ jobs:
       with:
         version: v1.27.0
 
+    - name: Login to Amazon ECR
+      uses: aws-actions/amazon-ecr-login@v2
+
     - name: Update kubeconfig for EKS
       run: |
         aws eks update-kubeconfig --region ${{ secrets.AWS_REGION }} --name neeraj-eks-cluster
-
-    - name: Login to Amazon ECR
-      uses: aws-actions/amazon-ecr-login@v2
 
     - name: Deploy Helm Chart
       env:
