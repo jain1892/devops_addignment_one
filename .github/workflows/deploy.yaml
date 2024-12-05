@@ -46,7 +46,7 @@ jobs:
       run: |
         kubectl get nodes
       env:
-        KUBECONFIG: ${{ github.workspace }}/.kube/config
+        KUBECONFIG: ${{ github.workspace }}/kubeconfig
 
     - name: Deploy Helm Chart
       env:
