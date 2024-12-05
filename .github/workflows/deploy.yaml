@@ -43,10 +43,13 @@ jobs:
       env:
         ECR_REGISTRY: ${{ secrets.AWS_ECR_REGISTRY }}
         ECR_REPO: ${{ secrets.AWS_ECR_REPO }}
+        KUBECONFIG: ${{ github.workspace }}/kubeconfig
       run: |
-        helm upgrade --install python-app oci://889772146711.dkr.ecr.ap-south-1.amazonaws.com/neeraj-helm \
+          
+          helm upgrade --install python-app oci://$ECR_REGISTRY/neeraj-helm \
           --namespace ${{ inputs.namespace }} \
           --create-namespace \
-          --set image.repository=oci://889772146711.dkr.ecr.ap-south-1.amazonaws.com/neeraj-docker \
+          --kubeconfig $KUBECONFIG \
+          --set image.repository=oci://$ECR_REGISTRY/$ECR_REPO \
           --set image.tag=${{ inputs.image_tag }} \
           --set environment=${{ inputs.environment }}
