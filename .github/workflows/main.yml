@@ -1,6 +1,11 @@
 name: Python Application CI/CD
 
-on: workflow_dispatch
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
 
 permissions:
   id-token: write
