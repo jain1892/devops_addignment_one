@@ -39,8 +39,7 @@ jobs:
       run: |
         aws eks update-kubeconfig --region ${{ secrets.AWS_REGION }} \
         --name neeraj-eks-cluster \
-        --kubeconfig ./kubeconfig \
-        --role-arn ${{ secrets.AWS_EKS_CLUSTER_ROLE_ARN }}
+        --kubeconfig ./kubeconfig
 
     - name: Deploy Helm Chart
       env:
