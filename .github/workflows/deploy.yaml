@@ -39,7 +39,7 @@ jobs:
       run: |
         aws eks update-kubeconfig --region ${{ secrets.AWS_REGION }} --name neeraj-eks-cluster --kubeconfig ./kubeconfig
         echo 'KUBE_CONFIG_DATA<<EOF' >> $GITHUB_ENV
-        echo $(cat ./kubeconfig | base64) >> $GITHUB_ENV
+        echo $(cat ./kubeconfig) >> $GITHUB_ENV
         echo 'EOF' >> $GITHUB_ENV
 
     - name: helm deploy
