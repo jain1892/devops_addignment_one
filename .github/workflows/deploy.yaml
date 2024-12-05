@@ -46,6 +46,10 @@ jobs:
         KUBECONFIG: ${{ github.workspace }}/kubeconfig
       run: |
           
+          # Move the kubeconfig file to the specified path
+          mkdir -p $(dirname $KUBECONFIG)
+          mv $HOME/.kube/config $KUBECONFIG
+          
           helm upgrade --install python-app oci://$ECR_REGISTRY/neeraj-helm \
           --namespace ${{ inputs.namespace }} \
           --create-namespace \
